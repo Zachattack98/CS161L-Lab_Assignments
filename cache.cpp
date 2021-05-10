@@ -27,7 +27,7 @@ struct cache_entry
    bool valid; // whether the current block is empty
    // false is empty, true is full
    uint64_t tag; // stores the tag
-   int missCnt;
+   uint64_t index; //stores the ndex
 };
 
 main(int argc, char **argv)
@@ -134,19 +134,52 @@ main(int argc, char **argv)
                   miss++;
                   total++;
                }
+               //Note: lines needs to have similar tag AND index to be a hit
+               //similar tags
                else if (cache[index + i].tag == tag)
                {
-                  if (tagCounter < 101)
-                  {
-                     cout << "Line " << tagCounter << " tag: " << tag << " , index: " << index << ", cache hit " << endl;
+                  //if same tag and index was reviewed anywhere beforehand, hit
+                  if(cache[index + i].index == index) {
+                     if (tagCounter < 101)
+                     {
+                        cout << "Line " << tagCounter << " tag: " << tag << " , index: " << index << ", cache hit " << endl;
+                        cout << cache[index + i].tag << endl;
+                        cout << cache[index + i].index << endl;
+                     }
+                     total++;
                   }
+
+                  //else if same tag only, write new index to a 0th cache black (miss)
+                  else {
+                     if (tagCounter < 101) {
+                        cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the 1111" << endl;
+                        cout << cache[index + i].tag << endl;
+                        cout << cache[index + i].index << endl;
+                     }
+                     miss++;
+                     total++;
+                  }
+                  break;
+               }
+
+               //similar indices (tags are not the same by default); else if same index only, write index to new cache block, ex. 0th -> 1st or 1st -> 2nd (miss)
+               else if (cache[index + i].index == index) {
+                  if (tagCounter < 101) {
+                     cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the 0000" << endl;
+                     cout << cache[index + i].tag << endl;
+                     cout << cache[index + i].index << endl;
+                  }
+
+                  //miss++;
                   total++;
                   break;
                }
-               else
-               {
+
+               //neither tag or index matches any preceeding lines
+               else {
                   total++;
                }
+
             }
 
             if (i == associativity)
@@ -159,17 +192,22 @@ main(int argc, char **argv)
                total++;
 
                //count the number of times each index misses (this represents the cache block it will be written to)
-               if(cache[index + first_in_tracker].missCnt < ((BLOCK_SIZE / associativity) - 1)) {
+               /*if(cache[index + first_in_tracker].missCnt < ((BLOCK_SIZE / associativity) - 1) && cache[index + first_in_tracker].missCnt == 0) {
                   cache[index].missCnt++;
                }
+
+               if(cache[index].tag != tag) {
+                  cache[index].missCnt = 0;
+               }*/
 
                cache[index + first_in_tracker].valid = true;
                //cout << "Sub happening: " << cache[first_in_tracker + index].tag << endl;
                if (tagCounter < 101)
                {
-                  cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the " << cache[index].missCnt << "th cache block" << endl;
+                  cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the " << endl; //cache[index].missCnt << "th cache block" << endl;
                }
                cache[first_in_tracker + index].tag = tag;
+               cache[first_in_tracker + index].index = index;
                first_in_tracker++;
                if (first_in_tracker == (BLOCK_SIZE / associativity))
                {
