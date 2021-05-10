@@ -1,14 +1,3 @@
-//=========================================================================
-// Name & Email must be EXACTLY as in Gradescope roster!
-// Name: Zachary Hill
-// Email: zhill003@ucr.edu
-//
-// Assignment name:
-// Lab section:
-// TA:
-//
-//=========================================================================
-
 #include <iostream>
 #include <climits>
 #include <iomanip>
@@ -27,7 +16,8 @@ struct cache_entry
    bool valid; // whether the current block is empty
    // false is empty, true is full
    uint64_t tag; // stores the tag
-   uint64_t index; //stores the ndex
+   int FIFO_position;
+   int blockCount;
 };
 
 main(int argc, char **argv)
@@ -44,7 +34,7 @@ main(int argc, char **argv)
 
    /* functioning code block of cache simulator*/
    size_t number_of_blocks = cache_size / BLOCK_SIZE;
-   vector<cache_entry> cache(number_of_blocks, {false, 0, 0});
+   vector<cache_entry> cache(number_of_blocks, {false, 0, 0, 0});
    size_t number_of_sets = number_of_blocks / associativity;
    // init the cache space ---> # of cache blocks, mark down
    // whether each cache block is valid ( empty), tag information of the cache
@@ -62,7 +52,6 @@ main(int argc, char **argv)
          uint32_t index = (read_line >> 4) & (number_of_sets - 1);
          // index = index & 0x000003FF;
          // need to calculate offset to find proper index
-         
          index_offset = 1;
          for (int counter = 1; counter < ((int)log2(cache_size / BLOCK_SIZE)); counter++)
          {
@@ -90,6 +79,7 @@ main(int argc, char **argv)
          }
       }
    }
+   //
 
    if (replacement_algorithm == "FIFO")
    {
@@ -101,6 +91,8 @@ main(int argc, char **argv)
 
          uint32_t tag = read_line >> ((int)log2(cache_size) - (int)log2(associativity));
          uint32_t index = (read_line >> 4) & (number_of_sets - 1);
+
+         vector<int> index_holder;
 
          // Check whether the current cache line is a hit or miss
          // in the cache data structure
@@ -129,57 +121,46 @@ main(int argc, char **argv)
             int i;
             for (i = 0; i < associativity; i++)
             {
-               if (cache[index + i].tag != tag && cache[index + i].valid == false)
+               if (cache[index + i].valid == false && cache[index + i].tag != tag)
                {
-                  miss++;
                   total++;
+                  miss++;
+                  cache[index + i].tag = tag;
+                  cache[index + i].valid = true;
+                  if (tagCounter < 101)
+                  {
+                     float miss_rate = (float)miss / float(total);
+                     cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the " << cache[index].blockCount << "th block 000000" << endl;
+                     cout << "miss: " << miss << endl;
+                     cout << "total: " << total << endl;
+                     cout << "miss rate:          " << fixed << setprecision(2) << (miss_rate * 100.0) << endl;
+                  }
+                  if (cache[index].blockCount < associativity - 1)
+                  {
+                     cache[index].blockCount++;
+                  }
+                  break;
                }
-               //Note: lines needs to have similar tag AND index to be a hit
-               //similar tags
                else if (cache[index + i].tag == tag)
                {
-                  //if same tag and index was reviewed anywhere beforehand, hit
-                  if(cache[index + i].index == index) {
-                     if (tagCounter < 101)
-                     {
-                        cout << "Line " << tagCounter << " tag: " << tag << " , index: " << index << ", cache hit " << endl;
-                        cout << cache[index + i].tag << endl;
-                        cout << cache[index + i].index << endl;
-                     }
-                     total++;
-                  }
-
-                  //else if same tag only, write new index to a 0th cache black (miss)
-                  else {
-                     if (tagCounter < 101) {
-                        cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the 1111" << endl;
-                        cout << cache[index + i].tag << endl;
-                        cout << cache[index + i].index << endl;
-                     }
-                     miss++;
-                     total++;
+                  total++;
+                  //if(cache[index].FIFO_position != index) {
+                     //miss++;
+                  //}
+                  if (tagCounter < 101)
+                  {
+                     float miss_rate = (float)miss / float(total);
+                     cout << "Line " << tagCounter << " tag: " << tag << " , index: " << index << ", cache hit " << endl;
+                     cout << "miss: " << miss << endl;
+                     cout << "total: " << total << endl;
+                     cout << "miss rate:          " << fixed << setprecision(2) << (miss_rate * 100.0) << endl;
                   }
                   break;
                }
-
-               //similar indices (tags are not the same by default); else if same index only, write index to new cache block, ex. 0th -> 1st or 1st -> 2nd (miss)
-               else if (cache[index + i].index == index) {
-                  if (tagCounter < 101) {
-                     cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the 0000" << endl;
-                     cout << cache[index + i].tag << endl;
-                     cout << cache[index + i].index << endl;
-                  }
-
-                  //miss++;
-                  total++;
-                  break;
+               else
+               {
+                  ;
                }
-
-               //neither tag or index matches any preceeding lines
-               else {
-                  total++;
-               }
-
             }
 
             if (i == associativity)
@@ -187,39 +168,30 @@ main(int argc, char **argv)
                // Done with loop, we failed to find a match
                // and failed to find available position
                // Need replacement
-
-               miss++;
-               total++;
-
-               //count the number of times each index misses (this represents the cache block it will be written to)
-               /*if(cache[index + first_in_tracker].missCnt < ((BLOCK_SIZE / associativity) - 1) && cache[index + first_in_tracker].missCnt == 0) {
-                  cache[index].missCnt++;
-               }
-
-               if(cache[index].tag != tag) {
-                  cache[index].missCnt = 0;
-               }*/
-
-               cache[index + first_in_tracker].valid = true;
-               //cout << "Sub happening: " << cache[first_in_tracker + index].tag << endl;
+               //miss++;
+               //total++;
+               int replacementPosition = cache[index].FIFO_position;
+               cache[index + replacementPosition].tag = tag;
                if (tagCounter < 101)
                {
-                  cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the " << endl; //cache[index].missCnt << "th cache block" << endl;
+                  float miss_rate = (float)miss / float(total);
+                  cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the " << replacementPosition << "th block 111111" << endl;
+                  cout << "miss: " << miss << endl;
+                  cout << "total: " << total << endl;
+                  cout << "miss rate:          " << fixed << setprecision(2) << (miss_rate * 100.0) << endl;
                }
-               cache[first_in_tracker + index].tag = tag;
-               cache[first_in_tracker + index].index = index;
-               first_in_tracker++;
-               if (first_in_tracker == (BLOCK_SIZE / associativity))
+               cache[index].FIFO_position += 1;
+               if (cache[index].FIFO_position == associativity)
                {
-                  first_in_tracker = 0;
+                  cache[index].FIFO_position = 0;
                }
             }
             tagCounter++;
          }
       }
    }
-   // cout << "miss: " << miss << endl;
-   // cout << "total: " << total << endl;
+   cout << "miss: " << miss << endl;
+   cout << "total: " << total << endl;
    float miss_rate = (float)miss / float(total);
 
    std::cout << "associativity:      " << associativity << std::endl;
