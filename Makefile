@@ -1,4 +1,4 @@
-all: cache.cpp 
-	g++ -g -Wall -o a.out cache.cpp
-clean: 
-	rm a.out
+run: cache.cpp
+	g++ -std=c++11 cache.cpp -o cache
+clean:
+	rm cache
