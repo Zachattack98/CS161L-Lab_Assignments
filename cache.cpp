@@ -171,7 +171,7 @@ main(int argc, char **argv)
                   cache[index + i].valid = true;
                   if (tagCounter < 101)
                   {
-                     cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the " << cache[index].blockCount << "th block" << endl;
+                     cout << "line: " << tagCounter << ", tag: " << tag << ", index: " << index << ", missed, wrote to the " << cache[index].blockCount << "th cache block." << endl;
                   }
                   if (cache[index].blockCount < associativity - 1)
                   {
@@ -183,34 +183,34 @@ main(int argc, char **argv)
                {
                   if (tagCounter < 101)
                   {
-                     cout << "Line " << tagCounter << " tag: " << tag << " , index: " << index << ", cache hit " << endl;
+                     cout << "line: " << tagCounter << ", tag: " << tag << ", index: " << index << ", cache hit." << endl;
                   }
                   break;
                }
             }
 
             int replacementPosition;
-            //int fifo = 0;
+            int fifo = 0;
 
             if (i >= associativity)
             {
                // Done with loop, we failed to find a match
                // and failed to find available position
                // Need replacement
-               //if (cache[index].FIFO_position == fifo) {
-                  //miss++;
-               //}
-               //else {
-                  //fifo = cache[index].FIFO_position;
-               //}
+               if (cache[index].FIFO_position == fifo) {
+                  miss++;
+               }
+               else {
+                  fifo = cache[index].FIFO_position;
+               }
 
                replacementPosition = cache[index].FIFO_position;
 
                if (tagCounter < 101)
                {
-                  cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the " << replacementPosition << "th block 111111" << endl;
-                  cout << "miss: " << miss << endl;
-                  cout << "total: " << total << endl;
+                  cout << "line: " << tagCounter << ", tag: " << tag << ", index: " << index << ", missed, wrote to the " << replacementPosition << "th cache block." << endl;
+                  //cout << "miss: " << miss << endl;
+                  //cout << "total: " << total << endl;
                }
                cache[index].FIFO_position = (cache[index].FIFO_position + 1) % associativity;
             }

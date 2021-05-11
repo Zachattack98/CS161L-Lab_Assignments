@@ -1,0 +1,100 @@
+line: 1, tag: 1774495, index: 102, missed, wrote to the 0th cache block.
+line: 2, tag: 1605056, index: 50, missed, wrote to the 0th cache block.
+line: 3, tag: 1709846, index: 104, missed, wrote to the 0th cache block.
+line: 4, tag: 1750409, index: 64, missed, wrote to the 0th cache block.
+line: 5, tag: 1774831, index: 0, missed, wrote to the 0th cache block.
+line: 6, tag: 1150061, index: 57, missed, wrote to the 0th cache block.
+line: 7, tag: 1771854, index: 63, missed, wrote to the 0th cache block.
+line: 8, tag: 1703633, index: 18, missed, wrote to the 0th cache block.
+line: 9, tag: 1771854, index: 63, cache hit.
+line: 10, tag: 1714848, index: 48, missed, wrote to the 0th cache block.
+line: 11, tag: 535355, index: 58, missed, wrote to the 0th cache block.
+line: 12, tag: 1677648, index: 28, missed, wrote to the 0th cache block.
+line: 13, tag: 529323, index: 89, missed, wrote to the 0th cache block.
+line: 14, tag: 1598108, index: 16, missed, wrote to the 0th cache block.
+line: 15, tag: 525531, index: 118, missed, wrote to the 0th cache block.
+line: 16, tag: 1067985, index: 110, missed, wrote to the 0th cache block.
+line: 17, tag: 1067985, index: 120, missed, wrote to the 0th cache block.
+line: 18, tag: 1770540, index: 20, missed, wrote to the 0th cache block.
+line: 19, tag: 1770533, index: 36, missed, wrote to the 0th cache block.
+line: 20, tag: 1773165, index: 80, missed, wrote to the 0th cache block.
+line: 21, tag: 1677648, index: 62, missed, wrote to the 0th cache block.
+line: 22, tag: 1773758, index: 52, missed, wrote to the 0th cache block.
+line: 23, tag: 1697942, index: 23, missed, wrote to the 0th cache block.
+line: 24, tag: 1067985, index: 110, cache hit.
+line: 25, tag: 542921, index: 70, missed, wrote to the 0th cache block.
+line: 26, tag: 1598108, index: 16, cache hit.
+line: 27, tag: 1703635, index: 0, missed, wrote to the 1th cache block.
+line: 28, tag: 1250428, index: 35, missed, wrote to the 0th cache block.
+line: 29, tag: 1716182, index: 94, missed, wrote to the 0th cache block.
+line: 30, tag: 1773673, index: 109, missed, wrote to the 0th cache block.
+line: 31, tag: 1598108, index: 16, cache hit.
+line: 32, tag: 1679232, index: 76, missed, wrote to the 0th cache block.
+line: 33, tag: 1679232, index: 76, cache hit.
+line: 34, tag: 1679232, index: 76, cache hit.
+line: 35, tag: 1716182, index: 94, cache hit.
+line: 36, tag: 1598108, index: 16, cache hit.
+line: 37, tag: 1750409, index: 64, cache hit.
+line: 38, tag: 1679232, index: 76, cache hit.
+line: 39, tag: 1591396, index: 59, missed, wrote to the 0th cache block.
+line: 40, tag: 1716182, index: 94, cache hit.
+line: 41, tag: 524692, index: 56, missed, wrote to the 0th cache block.
+line: 42, tag: 1770540, index: 20, cache hit.
+line: 43, tag: 1709827, index: 89, missed, wrote to the 1th cache block.
+line: 44, tag: 1776086, index: 51, missed, wrote to the 0th cache block.
+line: 45, tag: 524747, index: 46, missed, wrote to the 0th cache block.
+line: 46, tag: 541728, index: 11, missed, wrote to the 0th cache block.
+line: 47, tag: 1575032, index: 99, missed, wrote to the 0th cache block.
+line: 48, tag: 1709827, index: 89, cache hit.
+line: 49, tag: 529297, index: 47, missed, wrote to the 0th cache block.
+line: 50, tag: 1750409, index: 64, cache hit.
+line: 51, tag: 1669458, index: 104, missed, wrote to the 1th cache block.
+line: 52, tag: 1750409, index: 64, cache hit.
+line: 53, tag: 1380869, index: 123, missed, wrote to the 0th cache block.
+line: 54, tag: 1700665, index: 55, missed, wrote to the 0th cache block.
+line: 55, tag: 1604972, index: 28, missed, wrote to the 1th cache block.
+line: 56, tag: 1575032, index: 99, cache hit.
+line: 57, tag: 1770533, index: 36, cache hit.
+line: 58, tag: 1598108, index: 16, cache hit.
+line: 59, tag: 1703633, index: 13, missed, wrote to the 0th cache block.
+line: 60, tag: 1703633, index: 39, missed, wrote to the 0th cache block.
+line: 61, tag: 1067985, index: 110, cache hit.
+line: 62, tag: 535355, index: 58, cache hit.
+line: 63, tag: 541579, index: 15, missed, wrote to the 0th cache block.
+line: 64, tag: 1067985, index: 110, cache hit.
+line: 65, tag: 1716182, index: 94, cache hit.
+line: 66, tag: 1591396, index: 59, cache hit.
+line: 67, tag: 524747, index: 46, cache hit.
+line: 68, tag: 1716182, index: 94, cache hit.
+line: 69, tag: 1773758, index: 52, cache hit.
+line: 70, tag: 1774063, index: 62, missed, wrote to the 1th cache block.
+line: 71, tag: 1774063, index: 62, cache hit.
+line: 72, tag: 525537, index: 126, missed, wrote to the 0th cache block.
+line: 73, tag: 541738, index: 110, missed, wrote to the 1th cache block.
+line: 74, tag: 1669458, index: 104, cache hit.
+line: 75, tag: 1679232, index: 76, cache hit.
+line: 76, tag: 1709827, index: 89, cache hit.
+line: 77, tag: 535355, index: 32, missed, wrote to the 0th cache block.
+line: 78, tag: 1714103, index: 6, missed, wrote to the 0th cache block.
+line: 79, tag: 1591396, index: 60, missed, wrote to the 0th cache block.
+line: 80, tag: 1669458, index: 104, cache hit.
+line: 81, tag: 1679232, index: 76, cache hit.
+line: 82, tag: 1669458, index: 104, cache hit.
+line: 83, tag: 1709846, index: 104, cache hit.
+line: 84, tag: 541573, index: 67, missed, wrote to the 0th cache block.
+line: 85, tag: 541573, index: 67, cache hit.
+line: 86, tag: 541573, index: 67, cache hit.
+line: 87, tag: 541573, index: 67, cache hit.
+line: 88, tag: 1679232, index: 76, cache hit.
+line: 89, tag: 1697942, index: 47, missed, wrote to the 1th cache block.
+line: 90, tag: 1750409, index: 64, cache hit.
+line: 91, tag: 1067985, index: 110, cache hit.
+line: 92, tag: 1750409, index: 64, cache hit.
+line: 93, tag: 1700665, index: 55, cache hit.
+line: 94, tag: 1703635, index: 0, cache hit.
+line: 95, tag: 1703635, index: 0, cache hit.
+line: 96, tag: 535355, index: 58, cache hit.
+line: 97, tag: 543143, index: 34, missed, wrote to the 0th cache block.
+line: 98, tag: 1657873, index: 70, missed, wrote to the 1th cache block.
+line: 99, tag: 1716182, index: 94, cache hit.
+line: 100, tag: 1750409, index: 64, cache hit.
