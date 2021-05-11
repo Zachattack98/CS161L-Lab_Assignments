@@ -134,16 +134,16 @@ main(int argc, char **argv)
          else
          {
             int i;
-            for (i = 0; i < associativity && cache[index + i].valid == false && cache[index + i].tag != tag; i++) {
+            for (i = 0; i < associativity && cache[index + i].valid == false && cache[index + i].tag != tag; i++);
                
                if ( i == associativity || cache[index+i].valid == false ) { miss++; }
                
-               int replacementPosition = cache[index].FIFO_position;
+               int idx = cache[index].FIFO_position;
 
                if (cache[index + i].valid == false && cache[index + i].tag != tag)
                {
-                  cache[index + replacementPosition].tag = tag;
-                  cache[index + replacementPosition].valid = true;
+                  cache[index + idx].tag = tag;
+                  cache[index + idx].valid = true;
                }
 
                cache[index].FIFO_position += 1;
@@ -152,7 +152,6 @@ main(int argc, char **argv)
                {
                   cache[index].FIFO_position = 0;
                }
-            }
 
                /*if (cache[index + i].valid == false && cache[index + i].tag != tag)
                {
@@ -214,7 +213,7 @@ main(int argc, char **argv)
                }
             }
             tagCounter++; */
-         
+         }
       }
    }
    cout << "miss: " << miss << endl;
