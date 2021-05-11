@@ -87,7 +87,7 @@ main(int argc, char **argv)
       int tagCounter = 1;
       while (std::cin >> std::hex >> read_line)
       {
-         //total++;
+         total++;
 
          uint32_t tag = read_line >> ((int)log2(cache_size) - (int)log2(associativity));
          uint32_t index = (read_line >> 4) & (number_of_sets - 1);
@@ -123,7 +123,7 @@ main(int argc, char **argv)
             {
                if (cache[index + i].valid == false && cache[index + i].tag != tag)
                {
-                  total++;
+                  //total++;
                   miss++;
                   cache[index + i].tag = tag;
                   cache[index + i].valid = true;
@@ -143,10 +143,7 @@ main(int argc, char **argv)
                }
                else if (cache[index + i].tag == tag)
                {
-                  total++;
-                  //if(cache[index].FIFO_position != index) {
-                     //miss++;
-                  //}
+                  //total++;
                   if (tagCounter < 101)
                   {
                      float miss_rate = (float)miss / float(total);
@@ -168,8 +165,10 @@ main(int argc, char **argv)
                // Done with loop, we failed to find a match
                // and failed to find available position
                // Need replacement
-               //miss++;
-               //total++;
+               //if (cache[index + i].valid == true && cache[index + i].tag != tag) {
+                  miss++;
+               //}
+               total++;
                int replacementPosition = cache[index].FIFO_position;
                cache[index + replacementPosition].tag = tag;
                if (tagCounter < 101)
@@ -183,6 +182,7 @@ main(int argc, char **argv)
                cache[index].FIFO_position += 1;
                if (cache[index].FIFO_position == associativity)
                {
+                  //total++;
                   cache[index].FIFO_position = 0;
                }
             }
