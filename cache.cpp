@@ -1,3 +1,18 @@
+//=========================================================================
+// Name & Email must be EXACTLY as in Gradescope roster!
+// Name: Zachary Hill
+// Email: zhill003@ucr.edu
+// 
+// Assignment name: 
+// Lab section: 
+// TA: 
+// 
+// I hereby certify that I have not received assistance on this assignment,
+// or used code, from ANY outside source other than the instruction team
+// (apart from what was provided in the starter file).
+//
+//=========================================================================
+
 #include <iostream>
 #include <climits>
 #include <iomanip>
@@ -109,19 +124,37 @@ main(int argc, char **argv)
             {
                cache[index].tag = tag; // replacement
                miss++;
-               total++; // increment the miss counter
+               //total++; // increment the miss counter
             }
             else
             {
-               total++;
+               ;
             }
          }
          else
          {
             int i;
-            for (i = 0; i < associativity; i++)
-            {
+            for (i = 0; i < associativity && cache[index + i].valid == false && cache[index + i].tag != tag; i++) {
+               
+               if ( i == associativity || cache[index+i].valid == false ) { miss++; }
+               
+               int replacementPosition = cache[index].FIFO_position;
+
                if (cache[index + i].valid == false && cache[index + i].tag != tag)
+               {
+                  cache[index + replacementPosition].tag = tag;
+                  cache[index + replacementPosition].valid = true;
+               }
+
+               cache[index].FIFO_position += 1;
+
+               if (cache[index].FIFO_position == associativity)
+               {
+                  cache[index].FIFO_position = 0;
+               }
+            }
+
+               /*if (cache[index + i].valid == false && cache[index + i].tag != tag)
                {
                   //total++;
                   miss++;
@@ -129,11 +162,9 @@ main(int argc, char **argv)
                   cache[index + i].valid = true;
                   if (tagCounter < 101)
                   {
-                     float miss_rate = (float)miss / float(total);
                      cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the " << cache[index].blockCount << "th block 000000" << endl;
                      cout << "miss: " << miss << endl;
                      cout << "total: " << total << endl;
-                     cout << "miss rate:          " << fixed << setprecision(2) << (miss_rate * 100.0) << endl;
                   }
                   if (cache[index].blockCount < associativity - 1)
                   {
@@ -146,11 +177,9 @@ main(int argc, char **argv)
                   //total++;
                   if (tagCounter < 101)
                   {
-                     float miss_rate = (float)miss / float(total);
                      cout << "Line " << tagCounter << " tag: " << tag << " , index: " << index << ", cache hit " << endl;
                      cout << "miss: " << miss << endl;
                      cout << "total: " << total << endl;
-                     cout << "miss rate:          " << fixed << setprecision(2) << (miss_rate * 100.0) << endl;
                   }
                   break;
                }
@@ -165,19 +194,17 @@ main(int argc, char **argv)
                // Done with loop, we failed to find a match
                // and failed to find available position
                // Need replacement
-               //if (cache[index + i].valid == true && cache[index + i].tag != tag) {
-                  miss++;
+               //if (cache[index + i].tag != tag) {
+                  //miss++;
                //}
-               total++;
+               //total++;
                int replacementPosition = cache[index].FIFO_position;
                cache[index + replacementPosition].tag = tag;
                if (tagCounter < 101)
                {
-                  float miss_rate = (float)miss / float(total);
                   cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the " << replacementPosition << "th block 111111" << endl;
                   cout << "miss: " << miss << endl;
                   cout << "total: " << total << endl;
-                  cout << "miss rate:          " << fixed << setprecision(2) << (miss_rate * 100.0) << endl;
                }
                cache[index].FIFO_position += 1;
                if (cache[index].FIFO_position == associativity)
@@ -186,8 +213,8 @@ main(int argc, char **argv)
                   cache[index].FIFO_position = 0;
                }
             }
-            tagCounter++;
-         }
+            tagCounter++; */
+         
       }
    }
    cout << "miss: " << miss << endl;
