@@ -134,13 +134,13 @@ main(int argc, char **argv)
          else
          {
             int i;
-            for (i = 0; i < associativity && cache[index + i].valid == false && cache[index + i].tag != tag; i++);
+            //int idx;
+            for (i = 0; i < associativity; i++) {
                
-               if ( i == associativity || cache[index+i].valid == false ) { miss++; }
+               /*if ( i == associativity || cache[index+i].valid == false ) { miss++; }*/
                
-               int idx = cache[index].FIFO_position;
 
-               if (cache[index + i].valid == false && cache[index + i].tag != tag)
+               /*if (cache[index + i].valid == false && cache[index + i].tag != tag)
                {
                   cache[index + idx].tag = tag;
                   cache[index + idx].valid = true;
@@ -151,9 +151,20 @@ main(int argc, char **argv)
                if (cache[index].FIFO_position == associativity)
                {
                   cache[index].FIFO_position = 0;
+               }*/
+
+               /*if (i >= associativity) {
+                  idx = cache[index].FIFO_position;
+                  cache[index].FIFO_position = (cache[index].FIFO_position + 1) % associativity;
+               }
+               else{
+                  idx = i;
                }
 
-               /*if (cache[index + i].valid == false && cache[index + i].tag != tag)
+               cache[index + idx].tag = tag;
+               cache[index + idx].valid = true;*/
+
+               if (cache[index + i].valid == false && cache[index + i].tag != tag)
                {
                   //total++;
                   miss++;
@@ -194,7 +205,7 @@ main(int argc, char **argv)
                // and failed to find available position
                // Need replacement
                //if (cache[index + i].tag != tag) {
-                  //miss++;
+                  miss++;
                //}
                //total++;
                int replacementPosition = cache[index].FIFO_position;
@@ -212,7 +223,7 @@ main(int argc, char **argv)
                   cache[index].FIFO_position = 0;
                }
             }
-            tagCounter++; */
+            tagCounter++;
          }
       }
    }
