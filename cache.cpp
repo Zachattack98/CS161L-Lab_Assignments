@@ -135,7 +135,7 @@ main(int argc, char **argv)
          {
             int i;
             //int idx;
-            for (i = 0; i < associativity && cache[index + i].tag != tag; i++) {
+            //for (i = 0; i < associativity && cache[index + i].valid == false && cache[index + i].tag != tag; i++) {;}
                
                /*if ( i == associativity || cache[index+i].valid == false ) { miss++; }*/
                
@@ -164,16 +164,14 @@ main(int argc, char **argv)
                cache[index + idx].tag = tag;
                cache[index + idx].valid = true;*/
 
-               if (cache[index + i].valid == false || i == associativity)
-               {
+               for (i = 0; i < associativity; i++) {
+                  if (cache[index + i].valid == false && cache[index + i].tag != tag) {
                   miss++;
                   cache[index + i].tag = tag;
                   cache[index + i].valid = true;
                   if (tagCounter < 101)
                   {
-                     cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the " << cache[index].blockCount << "th block 000000" << endl;
-                     cout << "miss: " << miss << endl;
-                     cout << "total: " << total << endl;
+                     cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the " << cache[index].blockCount << "th block" << endl;
                   }
                   if (cache[index].blockCount < associativity - 1)
                   {
@@ -181,29 +179,32 @@ main(int argc, char **argv)
                   }
                   break;
                }
-            }
-
-            if (cache[index + i].tag == tag)
-            {
+               else if (cache[index + i].tag == tag)
+               {
                   if (tagCounter < 101)
                   {
                      cout << "Line " << tagCounter << " tag: " << tag << " , index: " << index << ", cache hit " << endl;
-                     cout << "miss: " << miss << endl;
-                     cout << "total: " << total << endl;
                   }
+                  break;
+               }
             }
 
-            int replacementPosition = cache[index].FIFO_position;
+            int replacementPosition;
+            //int fifo = 0;
 
             if (i >= associativity)
             {
                // Done with loop, we failed to find a match
                // and failed to find available position
                // Need replacement
-               //if (cache[index + i].tag != tag) {
+               //if (cache[index].FIFO_position == fifo) {
                   //miss++;
                //}
-               //total++;
+               //else {
+                  //fifo = cache[index].FIFO_position;
+               //}
+
+               replacementPosition = cache[index].FIFO_position;
 
                if (tagCounter < 101)
                {
