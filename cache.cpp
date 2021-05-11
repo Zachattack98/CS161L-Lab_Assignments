@@ -135,12 +135,12 @@ main(int argc, char **argv)
          {
             int i;
             //int idx;
-            for (i = 0; i < associativity; i++) {
+            for (i = 0; i < associativity && cache[index + i].tag != tag; i++) {
                
                /*if ( i == associativity || cache[index+i].valid == false ) { miss++; }*/
                
 
-               /*if (cache[index + i].valid == false && cache[index + i].tag != tag)
+               /*****if (cache[index + i].valid == false && cache[index + i].tag != tag)
                {
                   cache[index + idx].tag = tag;
                   cache[index + idx].valid = true;
@@ -151,7 +151,7 @@ main(int argc, char **argv)
                if (cache[index].FIFO_position == associativity)
                {
                   cache[index].FIFO_position = 0;
-               }*/
+               }*****/
 
                /*if (i >= associativity) {
                   idx = cache[index].FIFO_position;
@@ -164,9 +164,8 @@ main(int argc, char **argv)
                cache[index + idx].tag = tag;
                cache[index + idx].valid = true;*/
 
-               if (cache[index + i].valid == false && cache[index + i].tag != tag)
+               if (cache[index + i].valid == false || i == associativity)
                {
-                  //total++;
                   miss++;
                   cache[index + i].tag = tag;
                   cache[index + i].valid = true;
@@ -182,47 +181,44 @@ main(int argc, char **argv)
                   }
                   break;
                }
-               else if (cache[index + i].tag == tag)
-               {
-                  //total++;
+            }
+
+            if (cache[index + i].tag == tag)
+            {
                   if (tagCounter < 101)
                   {
                      cout << "Line " << tagCounter << " tag: " << tag << " , index: " << index << ", cache hit " << endl;
                      cout << "miss: " << miss << endl;
                      cout << "total: " << total << endl;
                   }
-                  break;
-               }
-               else
-               {
-                  ;
-               }
             }
 
-            if (i == associativity)
+            int replacementPosition = cache[index].FIFO_position;
+
+            if (i >= associativity)
             {
                // Done with loop, we failed to find a match
                // and failed to find available position
                // Need replacement
                //if (cache[index + i].tag != tag) {
-                  miss++;
+                  //miss++;
                //}
                //total++;
-               int replacementPosition = cache[index].FIFO_position;
-               cache[index + replacementPosition].tag = tag;
+
                if (tagCounter < 101)
                {
                   cout << "Line: " << tagCounter << " tag: " << tag << " , index: " << index << ", missed, wrote to the " << replacementPosition << "th block 111111" << endl;
                   cout << "miss: " << miss << endl;
                   cout << "total: " << total << endl;
                }
-               cache[index].FIFO_position += 1;
-               if (cache[index].FIFO_position == associativity)
-               {
-                  //total++;
-                  cache[index].FIFO_position = 0;
-               }
+               cache[index].FIFO_position = (cache[index].FIFO_position + 1) % associativity;
             }
+            else {
+               replacementPosition = i;
+            }
+            
+            cache[index + replacementPosition].tag = tag;
+            cache[index + replacementPosition].valid = true;
             tagCounter++;
          }
       }
