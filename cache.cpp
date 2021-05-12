@@ -60,6 +60,7 @@ main(int argc, char **argv)
 
    if (replacement_algorithm == "LRU")
    {
+      int tagCounter = 1;
       while (std::cin >> std::hex >> read_line)
       {
          total++;
@@ -75,13 +76,7 @@ main(int argc, char **argv)
          // Now we have offset, so can and it with index to find specific index given inputs
          index = index & index_offset;
 
-         // Check whether the current cache line is a hit or miss
-         // in the cache data structure
-         // if it is a miss: ///
-         //  miss++
-         //  and update the cache data structure
-         // else :
-         //  update the cache without incrementing miss;
+         vector<int> metadata_holder;
 
          // check for miss
          if (associativity == 1)
@@ -89,18 +84,108 @@ main(int argc, char **argv)
             if (cache[index].tag != tag)
             {
                cache[index].tag = tag; // replacement
-               miss++;                 // increment the miss counter
+               miss++;
             }
+            else
+            {
+               ;
+            }
+         }
+         else
+         {
+            int i;
+
+               for (i = 0; i < associativity; i++) {
+                  if (cache[index + i].valid == false && cache[index + i].tag != tag) {
+                  miss++;
+                  cache[index + i].tag = tag;
+                  cache[index + i].valid = true;
+                  
+                  for (int j = 0; j < associativity; j++) {
+                     metadata_holder[index + j]++;  //increment all values in metadata of each index
+                  }
+
+                  if (tagCounter < 101)
+                  {
+                     cout << "line: " << tagCounter << ", tag: " << tag << ", index: " << index << ", missed, wrote to the " << cache[index].blockCount << "th cache block." << endl;
+                  }
+                  if (cache[index].blockCount < associativity - 1)
+                  {
+                     cache[index].blockCount++;
+                  }
+                  break;
+               }
+               else if (cache[index + i].tag == tag)
+               {
+                  if (tagCounter < 101)
+                  {
+                     cout << "line: " << tagCounter << ", tag: " << tag << ", index: " << index << ", cache hit." << endl;
+                  }
+                  break;
+               }
+            }
+
+            //int replacementPosition;
+            int fifo = 0;
+            bool validMeta = 1;
+
+            if (i >= associativity)
+            {
+               // Done with loop, we failed to find a match
+               // and failed to find available position
+               // Need replacement
+               if (cache[index].FIFO_position == fifo) {
+                  miss = miss + 2;
+               }
+               else {
+                  fifo = cache[index].FIFO_position;
+               }
+
+               //replacementPosition = cache[index].FIFO_position;
+
+               //check if all metadata indexes are equal
+               for (int j=1; j < associativity; j++) {
+                  if(metadata_holder[index + j - 1] != metadata_holder[index + j])
+                     validMeta = 0;
+               }
+
+               if(validMeta == 1) {
+                  metadata_holder[0] == 0;   //set first index to zero
+               }
+               else {
+                  //find highest valued index in metadata
+                  for (int j=1; j < associativity; j++) {
+                     if(metadata_holder[index + j - 1] >= metadata_holder[index + j]) {
+                        metadata_holder[index + j] = 0;
+                     }
+                  }
+               }
+
+               if (tagCounter < 101)
+               {
+                  cout << "line: " << tagCounter << ", tag: " << tag << ", index: " << index << ", missed, wrote to the " << replacementPosition << "th cache block." << endl;
+                  //cout << "miss: " << miss << endl;
+                  //cout << "total: " << total << endl;
+               }
+               cache[index].FIFO_position = (cache[index].FIFO_position + 1) % associativity;
+            }
+            else {
+               replacementPosition = i;
+            }
+            
+            cache[index + replacementPosition].tag = tag;
+            cache[index + replacementPosition].valid = true;
+            tagCounter++;
          }
       }
    }
-   //
+   /************************************/
 
    if (replacement_algorithm == "FIFO")
    {
       int first_in_tracker = 0;
       int tagCounter = 1;
-      while (std::cin >> std::hex >> read_line)
+      while (cin >> hex >> read_line)
       {
          total++;
 
@@ -123,8 +208,7 @@ main(int argc, char **argv)
             if (cache[index].tag != tag)
             {
                cache[index].tag = tag; // replacement
-               miss++;
-               //total++; // increment the miss counter
+               miss++;  // increment the miss counter
             }
             else
             {
@@ -228,10 +312,10 @@ main(int argc, char **argv)
    cout << "total: " << total << endl;
    float miss_rate = (float)miss / float(total);
 
-   std::cout << "associativity:      " << associativity << std::endl;
-   std::cout << "cache size:         " << cache_size << std::endl;
-   std::cout << "replacement policy: " << argv[3] << endl;
-   std::cout << "miss rate:          " << std::fixed << std::setprecision(2) << (miss_rate * 100.0) << std::endl;
+   cout << "associativity:      " << associativity << endl;
+   cout << "cache size:         " << cache_size << endl;
+   cout << "replacement policy: " << argv[3] << endl;
+   cout << "miss rate:          " << fixed << setprecision(2) << (miss_rate * 100.0) << endl;
 
    return 0;
 }
