@@ -198,7 +198,7 @@ main(int argc, char **argv)
                // and failed to find available position
                // Need replacement
                if (cache[index].FIFO_position == fifo) {
-                  miss++;
+                  miss = miss + 2;
                }
                else {
                   fifo = cache[index].FIFO_position;
