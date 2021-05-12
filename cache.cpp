@@ -125,7 +125,7 @@ main(int argc, char **argv)
                }
             }
 
-            //int replacementPosition;
+            int replacementPosition;
             int fifo = 0;
             bool validMeta = 1;
 
@@ -151,12 +151,14 @@ main(int argc, char **argv)
 
                if(validMeta == 1) {
                   metadata_holder[0] == 0;   //set first index to zero
+                  replacementPosition = metadata_holder[index + j];
                }
                else {
                   //find highest valued index in metadata
                   for (int j=1; j < associativity; j++) {
                      if(metadata_holder[index + j - 1] >= metadata_holder[index + j]) {
                         metadata_holder[index + j] = 0;
+                        replacementPosition = metadata_holder[index + j];
                      }
                   }
                }
