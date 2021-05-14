@@ -101,18 +101,19 @@ int main(int argc, char **argv)
                {
                   //find highest valued index in metadata
                   int f;
-                  for (f = 1; f < associativity; f++)
+                  int temp = 0;
+                  for (f = 0; f < associativity; f++)
                   {
-                     if (metadata_holder[position + f] > metadata_holder[position + maxMetaData])
+                     if (metadata_holder[position + f] > temp)
                      {
-                        // metadata_holder[position + j] = 0;
-                        // idx = metadata_holder[position + j];
+                        // Find index with largest value representing LRU
                         maxMetaData = f;
+                        temp = metadata_holder[position + f];
                      }
                   }
                   idx = maxMetaData;
-                  // Reset back to zero
                   metadata_holder[position + idx] = 0;
+                  // Reset back to zero
                   if (index == 0 && printCnt2 < 5000)
                   {
                      //cout << "Set is filled" << endl;
@@ -132,6 +133,11 @@ int main(int argc, char **argv)
                   if (index == 0 && printCnt2 < 5000)
                   {
                      //cout << "Found an empty block" << endl;
+                     for (int z = 0; z < associativity; z++)
+                     {
+                        cout << metadata_holder[position + z] << " ";
+                     }
+                     cout << endl;
                      cout << "line: " << printCnt2 << ", tag: " << tag << ", index: " << index << ", missed, wrote to the " << idx << "th cache block." << endl;
                   }
                }
@@ -143,6 +149,11 @@ int main(int argc, char **argv)
                if (index == 0 && printCnt2 < 5000)
                {
                   cout << "line: " << printCnt2 << ", tag: " << tag << ", index: " << index << ", cache hit." << endl;
+                  for (int z = 0; z < associativity; z++)
+                  {
+                     cout << metadata_holder[position + z] << " ";
+                  }
+                  cout << endl;
                }
             }
          }
