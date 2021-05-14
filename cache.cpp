@@ -50,6 +50,7 @@ int main(int argc, char **argv)
    /* functioning code block of cache simulator*/
    size_t number_of_blocks = cache_size / BLOCK_SIZE;
    vector<cache_entry> cache(number_of_blocks, {false, 0, 0, 0});
+   vector<int> metadata_holder(number_of_blocks, 0); //vector for storing metadata
    size_t number_of_sets = number_of_blocks / associativity;
    // init the cache space ---> # of cache blocks, mark down
    // whether each cache block is valid ( empty), tag information of the cache
@@ -59,6 +60,7 @@ int main(int argc, char **argv)
    unsigned long long index_offset = 0;
 
    int printCnt2 = 1;
+   int maxMetaData = 0;
    if (replacement_algorithm == "LRU")
    {
       while (std::cin >> std::hex >> read_line)
@@ -67,8 +69,6 @@ int main(int argc, char **argv)
          uint32_t tag = read_line >> ((int)log2(cache_size) - (int)log2(associativity));
          uint32_t index = (read_line >> 4) & (number_of_sets - 1);
          uint32_t position = index * associativity;
-
-         vector<int> metadata_holder(number_of_blocks, 0); //vector for storing metadata
 
          int i;
          int idx;
@@ -89,57 +89,62 @@ int main(int argc, char **argv)
             {
                ;
             }
-
             for (int j = 0; j < associativity; j++)
             {
-               metadata_holder[position + j]++; //increment all values in metadata of each index before any evictions happen
+               metadata_holder[position + j] += 1; //increment all values in metadata of each index before any evictions happen
             }
 
             if (i >= associativity || cache[position + i].valid == false)
             {
                miss++;
-               // if (printCnt2 < 1000)
-               // {
-               //    cout << "line: " << printCnt2 << ", tag: " << tag << ", index: " << index << ", cache hit." << endl;
-               // }
-            }
-
-            // i had reached max, and no hit found;
-            if (i >= associativity)
-            {
-               if (printCnt2 < 1000)
+               if (i >= associativity)
                {
-                  cout << "Set is filled" << endl;
-                  cout << "line: " << printCnt2 << ", tag: " << tag << ", index: " << index << ", missed, wrote to the " << cache[index].FIFO_position << "th cache block." << endl;
-               }
-
-               //find highest valued index in metadata
-               int maxMetaData = 0;
-               int f;
-               for (f = 1; f < associativity; f++)
-               {
-                  if (metadata_holder[position + f] > metadata_holder[position + maxMetaData])
+                  //find highest valued index in metadata
+                  int f;
+                  for (f = 1; f < associativity; f++)
                   {
-                     // metadata_holder[position + j] = 0;
-                     // idx = metadata_holder[position + j];
-                     maxMetaData = f;
+                     if (metadata_holder[position + f] > metadata_holder[position + maxMetaData])
+                     {
+                        // metadata_holder[position + j] = 0;
+                        // idx = metadata_holder[position + j];
+                        maxMetaData = f;
+                     }
+                  }
+                  idx = maxMetaData;
+                  // Reset back to zero
+                  metadata_holder[position + idx] = 0;
+                  if (index == 0 && printCnt2 < 5000)
+                  {
+                     //cout << "Set is filled" << endl;
+                     cout << "line: " << printCnt2 << ", tag: " << tag << ", index: " << index << ", missed, wrote to the " << idx << "th cache block." << endl;
+                     for (int z = 0; z < associativity; z++)
+                     {
+                        cout << metadata_holder[position + z] << " ";
+                     }
+                     cout << endl;
                   }
                }
-               idx = maxMetaData;
-               metadata_holder[position + idx] = 0;
-            }
 
+               else
+               {
+                  // i has reached an empty slot
+                  idx = i;
+                  if (index == 0 && printCnt2 < 5000)
+                  {
+                     //cout << "Found an empty block" << endl;
+                     cout << "line: " << printCnt2 << ", tag: " << tag << ", index: " << index << ", missed, wrote to the " << idx << "th cache block." << endl;
+                  }
+               }
+               cache[position + idx].tag = tag;
+               cache[position + idx].valid = true;
+            }
             else
             {
-               idx = i;
-               // i has reached an empty slot
-               if (printCnt2 < 1000)
+               if (index == 0 && printCnt2 < 5000)
                {
-                  cout << "line: " << printCnt2 << ", tag: " << tag << ", index: " << index << ", missed, wrote to the " << i << "th cache block." << endl;
+                  cout << "line: " << printCnt2 << ", tag: " << tag << ", index: " << index << ", cache hit." << endl;
                }
             }
-            cache[position + idx].tag = tag;
-            cache[position + idx].valid = true;
          }
          printCnt2++;
       }
@@ -180,21 +185,12 @@ int main(int argc, char **argv)
             if (i >= associativity || cache[position + i].valid == false)
             {
                miss++;
-               if (printCnt < 1000)
-               {
-                  cout << "line: " << printCnt << ", tag: " << tag << ", index: " << index << ", cache hit." << endl;
-               }
             }
             //else //since we entering this loop more often, the miss counter was higher than it should be
             //{
             // i had reached max, and no hit found;
             if (i >= associativity)
             {
-               if (printCnt < 1000)
-               {
-                  cout << "Set is filled" << endl;
-                  cout << "line: " << printCnt << ", tag: " << tag << ", index: " << index << ", missed, wrote to the " << cache[index].FIFO_position << "th cache block." << endl;
-               }
                idx = cache[position].FIFO_position;
                //cache[position].tag = tag;
                cache[position].FIFO_position = (cache[position].FIFO_position + 1) % associativity;
@@ -203,10 +199,6 @@ int main(int argc, char **argv)
             {
                idx = i;
                // i has reached an empty slot
-               if (printCnt < 1000)
-               {
-                  cout << "line: " << printCnt << ", tag: " << tag << ", index: " << index << ", missed, wrote to the " << idx << "th cache block." << endl;
-               }
             }
             cache[position + idx].tag = tag;
             cache[position + idx].valid = true;
