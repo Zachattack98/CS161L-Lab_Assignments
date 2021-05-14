@@ -96,9 +96,14 @@ int main(int argc, char **argv)
 
             if (i >= associativity || cache[position + i].valid == false)
             {
+
                miss++;
                if (i >= associativity)
                {
+                  // for (int j = 0; j < associativity; j++)
+                  // {
+                  //    metadata_holder[position + j] += 1; //increment all values in metadata of each index before any evictions happen
+                  // }
                   //find highest valued index in metadata
                   int f;
                   int temp = 0;
@@ -112,9 +117,9 @@ int main(int argc, char **argv)
                      }
                   }
                   idx = maxMetaData;
-                  metadata_holder[position + idx] = 0;
+
                   // Reset back to zero
-                  if (index == 0 && printCnt2 < 5000)
+                  if (index == 0 && printCnt2 < 20000)
                   {
                      //cout << "Set is filled" << endl;
                      cout << "line: " << printCnt2 << ", tag: " << tag << ", index: " << index << ", missed, wrote to the " << idx << "th cache block." << endl;
@@ -130,7 +135,7 @@ int main(int argc, char **argv)
                {
                   // i has reached an empty slot
                   idx = i;
-                  if (index == 0 && printCnt2 < 5000)
+                  if (index == 0 && printCnt2 < 20000)
                   {
                      //cout << "Found an empty block" << endl;
                      for (int z = 0; z < associativity; z++)
@@ -141,12 +146,13 @@ int main(int argc, char **argv)
                      cout << "line: " << printCnt2 << ", tag: " << tag << ", index: " << index << ", missed, wrote to the " << idx << "th cache block." << endl;
                   }
                }
+               metadata_holder[position + idx] = 0;
                cache[position + idx].tag = tag;
                cache[position + idx].valid = true;
             }
             else
             {
-               if (index == 0 && printCnt2 < 5000)
+               if (index == 0 && printCnt2 < 20000)
                {
                   cout << "line: " << printCnt2 << ", tag: " << tag << ", index: " << index << ", cache hit." << endl;
                   for (int z = 0; z < associativity; z++)
@@ -155,6 +161,7 @@ int main(int argc, char **argv)
                   }
                   cout << endl;
                }
+               metadata_holder[position + i] = 0;
             }
          }
          printCnt2++;
